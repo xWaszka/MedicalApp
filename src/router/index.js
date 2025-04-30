@@ -68,35 +68,5 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach(async (to, from, next) => {
-  const token = store.getters['user/getToken']
-  const user = store.getters['user/getUser']
-  const requiresAuth = to.meta.requiresAuth
-  const requiresGuest = to.meta.requiresGuest
-
-  if (requiresAuth && !token) {
-    return next({ name: 'Login' })
-  }
-
-  if (requiresGuest && token) {
-    return next({ name: 'Dashboard' })
-  }
-
-  if (token && !user) {
-    try {
-      await Auth.getUser()
-    } catch (e) {
-      Auth.logout()
-      return next({ name: 'Login' })
-    }
-  }
-
-  store.commit({
-    type: 'system/SET_ATTEMPT',
-    attempt: false
-  })
-
-  next()
-})
 
 export default router
