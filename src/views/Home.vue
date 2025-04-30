@@ -44,17 +44,32 @@
       </div>
     </section>
 
-    <section ref="whyUsSection" class="snap-section why-us text-center">
-      <h2 class="why-us-header display-3">Dlaczego warto nas wybrać?</h2>
-      <div class="why-us-items d-flex flex-column flex-md-row justify-content-center align-items-start gap-5 px-3 px-md-0">
+    <section
+  ref="whyUsSection"
+  class="snap-section why-us text-center"
+>
+  <h2 class="why-us-header display-3 mb-5">Dlaczego warto nas wybrać?</h2>
+  <div
+    class="why-us-items
+           d-flex
+           flex-column flex-md-row
+           justify-content-center
+           align-items-center
+           gap-4
+           px-2 px-md-0"
+  >
+    <div
+      v-for="a in advantages"
+      :key="a.title"
+      class="adv-item slide-in"
+    >
+      <i :class="`${a.icon} fs-2 mb-3`"></i>
+      <h5>{{ a.title }}</h5>
+      <p>{{ a.text }}</p>
+    </div>
+  </div>
+</section>
 
-        <div v-for="a in advantages" :key="a.title" class="adv-item slide-in">
-          <i :class="`${a.icon} fs-2 mb-3`"></i>
-          <h5>{{ a.title }}</h5>
-          <p>{{ a.text }}</p>
-        </div>
-      </div>
-    </section>
 
     <section class="snap-section testimonials">
       <div class="container py-5">
@@ -136,12 +151,29 @@ onMounted(() => {
 
 <style scoped>
 html, body, #app { height: 100%; margin: 0; }
-
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;       
+}
 .snap-container {
-  height: calc(100vh - 56px);
-  overflow-y: scroll;
+  position: absolute;
+  top: 56px;           /* wysokość navbara */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;    /* tylko tutaj będzie scroll */
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
+}
+
+.snap-section {
+  scroll-snap-align: start;
+  height: 100%;        /* teraz zajmuje całą dostępną wysokość pod navbarem */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 .why-us-items {
   
@@ -153,14 +185,7 @@ html, body, #app { height: 100%; margin: 0; }
   margin-bottom: 2rem;
 }
 
-.snap-section {
-  scroll-snap-align: start;
-  height: calc(100vh - 56px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
+
 
 .hero {
   background: url(/assets/bg.png) center/cover no-repeat;
@@ -226,4 +251,42 @@ html, body, #app { height: 100%; margin: 0; }
 .cta {
   background: #547792;
 }
+@media (max-width: 767px) {
+  /* Zmniejszamy odstęp pod nagłówkami sekcji */
+  .snap-section.services,
+  .snap-section.why-us,
+  .snap-section.testimonials,
+  .snap-section.cta {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  /* Mniej „przerośnięty” nagłówek w why-us */
+  .why-us-header {
+    margin-bottom: 2rem !important;
+    font-size: 2rem;
+  }
+
+  /* Mniejsze karty usług */
+  .service-card {
+    padding: 1rem !important;
+    min-width: auto;
+    width: 100%;
+    
+  }
+  
+
+  /* Mniejszy odstęp pomiędzy elementami w why-us */
+  .why-us-items {
+    gap: 1.5rem !important;
+    
+  }
+
+  /* Mniejsze marginesy dla pojedynczych „adv-item” */
+  .adv-item {
+    margin-bottom: 1rem !important;
+    
+  }
+}
+
 </style>
