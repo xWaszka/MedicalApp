@@ -5,6 +5,9 @@ import store from '@/store'
 import '@/assets/css/main.css'
 import '/dist/output.css'
 import 'leaflet/dist/leaflet.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.bundle.js'
+
 
 createApp(App)
     .use(store)

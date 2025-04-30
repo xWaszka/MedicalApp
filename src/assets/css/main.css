@@ -7,3 +7,17 @@ nav .router-link-exact-active {
 .user-nav-area .router-link-exact-active {
     background-color: rgb(243 244 246);
 }
+html, body, #app {
+    height: 100%;
+    margin: 0;
+  }
+  #app {
+    display: flex;
+    flex-direction: column;
+  }
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
