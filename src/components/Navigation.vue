@@ -10,7 +10,7 @@
                 v-for="item in navigation"
                 :key="item.name"
                 :to="{ name: item.name }"
-                class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium text-decoration-none"
               >
                 {{ item.label }}
               </router-link>
@@ -46,7 +46,7 @@
                       v-for="item in loggedInNavigation"
                       :key="item.name"
                       :to="{ name: item.name }"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-decoration-none"
                     >
                       {{ item.label }}
                     </router-link>
@@ -56,7 +56,7 @@
                       v-for="item in guestNavigation"
                       :key="item.name"
                       :to="{ name: item.name }"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-decoration-none"
                     >
                       {{ item.label }}
                     </router-link>

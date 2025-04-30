@@ -1,20 +1,16 @@
 <template>
+  <Navigation />
+  <main>
+    <router-view />
+  </main>
+  <FlashMessage />
 
-    <Navigation />
-   
-    <main>
-      <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        
-        <router-view />
-
-      </div>
-    </main>
-
-    <FlashMessage />
-    
+  <Footer />
 </template>
+
 
 <script setup>
   import Navigation from '@/components/Navigation.vue'
   import FlashMessage from '@/components/FlashMessage.vue'
+  import Footer from '@/components/Footer.vue'
 </script>
