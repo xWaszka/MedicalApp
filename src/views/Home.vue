@@ -14,10 +14,9 @@
       <h1 class="display-5 fw-bold mb-3">Witamy w Medical Appointment Booking</h1>
       <p class="lead mb-4">Projekt testowy na przedmiot PP5. Przetestuj już dziś!</p>
       <router-link
-        to="/auth/login"
+        to="/login"
         class="btn btn-success btn-lg"
-        aria-label="Przejdź do rezerwacji wizyty"
-      >
+        aria-label="Przejdź do rezerwacji wizyty">
         Umów wizytę już dziś!
       </router-link>
     </div>
