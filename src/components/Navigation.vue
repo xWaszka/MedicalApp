@@ -1,10 +1,10 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #004085;">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
     <div class="container-fluid">
-      <RouterLink to="/" class="navbar-brand font-weight-bold text-white">
-        Medical App
-      </RouterLink>
+      <RouterLink to="/" class="navbar-brand">Medical App</RouterLink>
+
       <button
+        ref="toggler"
         class="navbar-toggler"
         type="button"
         data-bs-toggle="collapse"
@@ -15,66 +15,28 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
+
+      <div ref="navCollapse" class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
+          <li
+            v-for="link in filteredLinks"
+            :key="link.to"
+            class="nav-item"
+          >
             <RouterLink
-              to="/"
-              class="nav-link font-weight-bold"
-              exact
+              :to="link.to"
+              class="nav-link"
               active-class="active-link"
+              @click="hideNav"
             >
-              Strona Główna
+              {{ link.text }}
             </RouterLink>
           </li>
-          <li class="nav-item">
-            <RouterLink
-              to="/contact"
-              class="nav-link font-weight-bold"
-              active-class="active-link"
-            >
-              Kontakt
-            </RouterLink>
+          <li v-if="user" class="nav-item">
+            <button class="nav-link btn btn-link text-white" @click="logout">
+              Wyloguj
+            </button>
           </li>
-          <template v-if="!user">
-            <li class="nav-item">
-              <RouterLink
-                to="/login"
-                class="nav-link font-weight-bold"
-                active-class="active-link"
-              >
-                Zaloguj się
-              </RouterLink>
-            </li>
-            <li class="nav-item">
-              <RouterLink
-                to="/register"
-                class="nav-link font-weight-bold"
-                active-class="active-link"
-              >
-                Zarejestruj się
-              </RouterLink>
-            </li>
-          </template>
-          <template v-else>
-            <li class="nav-item">
-              <RouterLink
-                to="/appointment"
-                class="nav-link font-weight-bold"
-                active-class="active-link"
-              >
-                Umów wizytę
-              </RouterLink>
-            </li>
-            <li class="nav-item">
-              <button
-                @click="handleLogout"
-                class="nav-link btn btn-link text-white font-weight-bold"
-              >
-                Wyloguj
-              </button>
-            </li>
-          </template>
         </ul>
       </div>
     </div>
@@ -82,77 +44,57 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { auth } from '@/firebase'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
+import { Collapse } from 'bootstrap'
 
 const user = ref(null)
 const router = useRouter()
+const navCollapse = ref(null)
 
 onMounted(() => {
-  onAuthStateChanged(auth, (currentUser) => {
-    user.value = currentUser
+  onAuthStateChanged(auth, u => {
+    user.value = u
   })
 })
 
-const handleLogout = async () => {
-  try {
-    await signOut(auth)
-    router.push('/login')
-  } catch (err) {
-    console.error('Błąd podczas wylogowywania:', err)
-  }
+const links = [
+  { to: '/', text: 'Strona Główna',    auth: null },
+  { to: '/contact', text: 'Kontakt',   auth: null },
+  { to: '/login',   text: 'Zaloguj się', auth: false },
+  { to: '/register',text: 'Zarejestruj się', auth: false },
+  { to: '/appointment', text: 'Umów wizytę', auth: true },
+  { to: '/profile', text: 'Profil',     auth: true }
+]
+
+const filteredLinks = computed(() =>
+  links.filter(l =>
+    l.auth === null ||
+    (l.auth === true  && user.value) ||
+    (l.auth === false && !user.value)
+  )
+)
+
+function hideNav() {
+  
+  const bs = Collapse.getInstance(navCollapse.value) || new Collapse(navCollapse.value)
+  bs.hide()
+}
+
+async function logout() {
+  await signOut(auth)
+  hideNav()
+  router.push('/login')
 }
 </script>
 
-<style scoped>
+<style>
 .navbar {
-  border-radius: 0;
+  z-index: 1000; 
 }
-
-.navbar-brand {
-  font-weight: bold;
-  background-color: transparent !important;
-}
-
-.nav-link {
-  color: white !important;
-  font-weight: bold;
-}
-
-.nav-link:hover {
-  color: #ffcc00 !important;
-}
-
-.navbar-toggler-icon {
-  background-color: white;
-  width: 30px;
-  height: 3px;
-  border-radius: 0;
-  position: relative;
-}
-
-.navbar-toggler-icon:before,
-.navbar-toggler-icon:after {
-  content: '';
-  position: absolute;
-  width: 30px;
-  height: 3px;
-  background-color: white;
-  border-radius: 0;
-}
-
-.navbar-toggler-icon:before {
-  top: -8px;
-}
-
-.navbar-toggler-icon:after {
-  top: 8px;
-}
-
-.nav-item .nav-link.router-link-exact-active {
-  background-color: transparent !important;
-  color: white !important;
+.active-link {
+  text-decoration: underline;
 }
 </style>
