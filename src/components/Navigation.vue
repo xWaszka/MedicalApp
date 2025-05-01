@@ -1,169 +1,158 @@
 <template>
-  <Disclosure as="nav" class="bg-gray-800" v-slot="{ open }">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="flex h-16 items-center justify-between">
-        <div class="flex items-center">
-          <div class="flex-shrink-0"></div>
-          <div class="hidden md:block">
-            <div class="ml-10 flex items-baseline space-x-4">
-              <router-link
-                v-for="item in navigation"
-                :key="item.name"
-                :to="{ name: item.name }"
-                class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium text-decoration-none"
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #004085;">
+    <div class="container-fluid">
+      <RouterLink to="/" class="navbar-brand font-weight-bold text-white">
+        Medical App
+      </RouterLink>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <RouterLink
+              to="/"
+              class="nav-link font-weight-bold"
+              exact
+              active-class="active-link"
+            >
+              Strona Główna
+            </RouterLink>
+          </li>
+          <li class="nav-item">
+            <RouterLink
+              to="/contact"
+              class="nav-link font-weight-bold"
+              active-class="active-link"
+            >
+              Kontakt
+            </RouterLink>
+          </li>
+          <template v-if="!user">
+            <li class="nav-item">
+              <RouterLink
+                to="/login"
+                class="nav-link font-weight-bold"
+                active-class="active-link"
               >
-                {{ item.label }}
-              </router-link>
-            </div>
-          </div>
-        </div>
-        <div class="hidden md:block">
-          <div class="ml-4 flex items-center md:ml-6">
-            <span class="text-white" v-if="auth">{{ auth.name }}</span>
-            <span class="text-white" v-else>Profil</span>
-
-            <Menu as="div" class="relative ml-3">
-              <div>
-                <MenuButton class="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                  <span class="sr-only">Otwórz menu</span>
-                  <img class="h-8 w-8 rounded-full" :src="user.imageUrl" alt="" />
-                </MenuButton>
-              </div>
-              <transition
-                enter-active-class="transition ease-out duration-100"
-                enter-from-class="transform opacity-0 scale-95"
-                enter-to-class="transform opacity-100 scale-100"
-                leave-active-class="transition ease-in duration-75"
-                leave-from-class="transform opacity-100 scale-100"
-                leave-to-class="transform opacity-0 scale-95"
+                Zaloguj się
+              </RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink
+                to="/register"
+                class="nav-link font-weight-bold"
+                active-class="active-link"
               >
-                <MenuItems class="user-nav-area absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <div v-if="auth">
-                    <div class="block px-4 py-2 text-sm text-gray-700 font-medium border-b border-gray-200">
-                      {{ auth.name }}
-                    </div>
-                    <router-link
-                      v-for="item in loggedInNavigation"
-                      :key="item.name"
-                      :to="{ name: item.name }"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-decoration-none"
-                    >
-                      {{ item.label }}
-                    </router-link>
-                  </div>
-                  <div v-else>
-                    <router-link
-                      v-for="item in guestNavigation"
-                      :key="item.name"
-                      :to="{ name: item.name }"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-decoration-none"
-                    >
-                      {{ item.label }}
-                    </router-link>
-                  </div>
-                </MenuItems>
-              </transition>
-            </Menu>
-          </div>
-        </div>
-        <div class="-mr-2 flex md:hidden">
-          <DisclosureButton class="inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-            <span class="sr-only">Otwórz menu</span>
-            <Bars3Icon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
-            <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
-          </DisclosureButton>
-        </div>
+                Zarejestruj się
+              </RouterLink>
+            </li>
+          </template>
+          <template v-else>
+            <li class="nav-item">
+              <RouterLink
+                to="/appointment"
+                class="nav-link font-weight-bold"
+                active-class="active-link"
+              >
+                Umów wizytę
+              </RouterLink>
+            </li>
+            <li class="nav-item">
+              <button
+                @click="handleLogout"
+                class="nav-link btn btn-link text-white font-weight-bold"
+              >
+                Wyloguj
+              </button>
+            </li>
+          </template>
+        </ul>
       </div>
     </div>
-
-    <DisclosurePanel class="md:hidden">
-      <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-        <router-link
-          v-for="item in navigation"
-          :key="item.name"
-          :to="{ name: item.name }"
-          class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-        >
-          {{ item.label }}
-        </router-link>
-      </div>
-      <div class="border-t border-gray-700 pt-4 pb-3">
-        <div class="flex items-center px-5">
-          <div class="flex-shrink-0">
-            <img class="h-10 w-10 rounded-full" :src="user.imageUrl" alt="" />
-          </div>
-          <div v-if="auth" class="ml-3">
-            <div class="text-base font-medium leading-none text-white">{{ auth.name }}</div>
-            <div class="text-sm font-medium leading-none text-gray-400">{{ auth.email }}</div>
-          </div>
-        </div>
-        <div v-if="guestNavigation.length > 0" class="mt-3 space-y-1 px-2">
-          <router-link
-            v-for="item in guestNavigation"
-            :key="item.name"
-            :to="{ name: item.name }"
-            class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-          >
-            {{ item.label }}
-          </router-link>
-        </div>
-      </div>
-    </DisclosurePanel>
-  </Disclosure>
+  </nav>
 </template>
 
 <script setup>
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Menu,
-  MenuButton,
-  MenuItems,
-} from '@headlessui/vue'
-import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
-import { computed, ref, onMounted, watch } from 'vue'
-import store from '@/store'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { auth } from '@/firebase'
+import { onAuthStateChanged, signOut } from 'firebase/auth'
 
-const auth = computed(() => store.getters['user/getUser'])
-
-const user = {
-  imageUrl: '/user.png',
-}
-
-const navigation = [
-  { name: 'Home', label: 'Strona główna' },
-  { name: 'Contact', label: 'Kontakt' },
-]
-
-const loggedInNavigation = [
-  { name: 'Dashboard', label: 'Panel' },
-  { name: 'Logout', label: 'Wyloguj' },
-]
-
-const guestNavigation = [
-  { name: 'Login', label: 'Logowanie' },
-  { name: 'Register', label: 'Rejestracja' },
-]
-
-const navPreparation = (origin, output) => {
-  output.value = []
-
-  origin.forEach((item) => {
-    if (auth.value && item.reqAuth) {
-      output.value.push(item)
-    }
-    if (!auth.value && item.reqGuest) {
-      output.value.push(item)
-    }
-  })
-}
+const user = ref(null)
+const router = useRouter()
 
 onMounted(() => {
-  navPreparation(loggedInNavigation, guestNavigation)
+  onAuthStateChanged(auth, (currentUser) => {
+    user.value = currentUser
+  })
 })
 
-watch(auth, () => {
-  navPreparation(loggedInNavigation, guestNavigation)
-})
+const handleLogout = async () => {
+  try {
+    await signOut(auth)
+    router.push('/login')
+  } catch (err) {
+    console.error('Błąd podczas wylogowywania:', err)
+  }
+}
 </script>
+
+<style scoped>
+.navbar {
+  border-radius: 0;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  background-color: transparent !important;
+}
+
+.nav-link {
+  color: white !important;
+  font-weight: bold;
+}
+
+.nav-link:hover {
+  color: #ffcc00 !important;
+}
+
+.navbar-toggler-icon {
+  background-color: white;
+  width: 30px;
+  height: 3px;
+  border-radius: 0;
+  position: relative;
+}
+
+.navbar-toggler-icon:before,
+.navbar-toggler-icon:after {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 3px;
+  background-color: white;
+  border-radius: 0;
+}
+
+.navbar-toggler-icon:before {
+  top: -8px;
+}
+
+.navbar-toggler-icon:after {
+  top: 8px;
+}
+
+.nav-item .nav-link.router-link-exact-active {
+  background-color: transparent !important;
+  color: white !important;
+}
+</style>
