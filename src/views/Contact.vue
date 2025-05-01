@@ -2,7 +2,7 @@
   <div class="container py-5">
     <div class="row mb-5">
       <div class="col-12 col-md-6 offset-md-3">
-        <label for="city-select" class="form-label">Wybierz miasto:</label>
+        <label for="city-select" class="form-label display-4">Wybierz miasto:</label>
         <select id="city-select" class="form-select" v-model="selectedCity">
           <option :value="null" disabled>– Wybierz miasto –</option>
           <option v-for="(c, key) in cities" :key="key" :value="key">

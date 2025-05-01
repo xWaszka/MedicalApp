@@ -6,48 +6,49 @@ const routes = [
     component: () => import('@/components/DefaultLayout.vue'),
     children: [
       {
-        path: '/',
+        path: '',
         name: 'Home',
-        component: () => import('@/views/Home.vue'),
+        component: () => import('@/views/Home.vue')
       },
       {
-        path: '/contact',
+        path: 'contact',
         name: 'Contact',
-        component: () => import('@/views/Contact.vue'),
-      },      
+        component: () => import('@/views/Contact.vue')
+      },
       {
-        path: '/login',
+        path: 'login',
         name: 'Login',
         component: () => import('@/views/Login.vue'),
         meta: { requiresGuest: true }
-      },      
+      },
       {
-        path: '/register',
+        path: 'register',
         name: 'Register',
         component: () => import('@/views/Register.vue'),
         meta: { requiresGuest: true }
       },
       {
-        path: '/appointment',
+        path: 'profile',
+        name: 'Profile',
+        component: () => import('@/views/Profile.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'appointment',
         name: 'Appointment',
         component: () => import('@/views/AppointmentForm.vue'),
         meta: { requiresAuth: true }
       },
       {
-        path: '/:pathMatch(.*)*',
-        name: 'notFound',
-        component: () => import('@/views/NotFound.vue'),
-      },
-      {
-        path: '/logout',
-        name: 'Logout',
-        meta: { requiresAuth: true }
+        path: ':pathMatch(.*)*',
+        name: 'NotFound',
+        component: () => import('@/views/NotFound.vue')
       }
     ]
   }
 ]
-const router = createRouter({
+
+export default createRouter({
   history: createWebHistory(),
   routes
 })
-export default router
