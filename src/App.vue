@@ -3,12 +3,10 @@
   <div class="main-content">
     <router-view />
   </div>
-  <FlashMessage />
 </template>
 
 <script setup>
 import Navigation from '@/components/Navigation.vue'
-import FlashMessage from '@/components/FlashMessage.vue'
 </script>
 
 <style scoped>
