@@ -7,7 +7,7 @@
         <p class="lead mb-4">
           Zarezerwuj wizytę stacjonarną lub online w kilka sekund.
         </p>
-        <router-link to="/auth/login" class="btn btn-success btn-lg">
+        <router-link to="/appointment" class="btn btn-success btn-lg">
           Umów wizytę
         </router-link>
       </div>
@@ -22,7 +22,7 @@
           <div class="col-12 col-lg-8">
             <div class="d-flex flex-column flex-md-row justify-content-center justify-content-lg-end gap-4">
               <router-link
-                to="/clinic"
+                to="/contact"
                 class="service-card d-flex flex-column align-items-center text-center text-decoration-none text-dark shadow-sm"
               >
                 <i class="bi bi-hospital fs-1 text-primary mb-3"></i>
@@ -101,7 +101,7 @@
     <section class="snap-section cta text-center">
       <div class="container py-5">
         <h3 class="mb-3 text-white">Gotowy na wizytę?</h3>
-        <router-link to="/auth/login" class="btn btn-light btn-lg">
+        <router-link to="/appointment" class="btn btn-light btn-lg">
           Zarezerwuj teraz
         </router-link>
       </div>

@@ -1,93 +1,97 @@
 <template>
-    <div class="appointment-form">
-      <div v-if="step === 1">
-        <h2>Umów wizytę – krok 1: wybierz przychodnię</h2>
-        <select v-model="selectedClinic">
+  <div class="container my-4">
+    <div v-if="step === 1" class="mb-4">
+      <h2 class="mb-3">Umów wizytę – krok 1: wybierz przychodnię</h2>
+      <div class="mb-3">
+        <select v-model="selectedClinic" class="form-select">
           <option disabled value="">-- Wybierz przychodnię --</option>
           <option v-for="c in clinics" :key="c.id" :value="c.id">{{ c.name }}</option>
         </select>
-        <button :disabled="!selectedClinic" @click="goToStep2">Dalej</button>
       </div>
-  
-      <div v-else-if="step === 2" class="calendar-container">
-        <div class="calendar-header">
-          <button @click="prevMonth">&lt;</button>
-          <h2>{{ monthNames[currentMonth] }} {{ currentYear }}</h2>
-          <button @click="nextMonth">&gt;</button>
-        </div>
-        <div class="weekdays">
-          <div v-for="d in weekdays" :key="d">{{ d }}</div>
-        </div>
-        <div class="calendar">
-          <div class="week" v-for="(week, wi) in weeks" :key="wi">
-            <div
-              class="day"
-              v-for="(day, di) in week"
-              :key="di"
-              :class="{
-                past: day?.isPast,
-                booked: day && day.isBooked,
-                available: day && !day.isBooked && !day.isPast
-              }"
-              @click="day && chooseDay(day)"
-            >
-              <strong v-if="day">{{ day.date.getDate() }}</strong>
-            </div>
-          </div>
-        </div>
-        <div v-if="selectedDay" class="time-selection">
-          <h3>Godziny dla {{ selectedDay.date.toLocaleDateString() }}</h3>
-          <div class="hours">
-            <button
-              v-for="h in hours"
-              :key="h"
-              :disabled="isHourBooked(h)"
-              :class="{ booked: isHourBooked(h), selected: h === selectedHour }"
-              @click="chooseHour(h)"
-            >{{ h }}</button>
+      <button class="btn btn-primary" :disabled="!selectedClinic" @click="goToStep2">Dalej</button>
+    </div>
+
+    <div v-else-if="step === 2" class="mb-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <button class="btn btn-outline-secondary" @click="prevMonth">&lt;</button>
+        <h2 class="m-0">{{ monthNames[currentMonth] }} {{ currentYear }}</h2>
+        <button class="btn btn-outline-secondary" @click="nextMonth">&gt;</button>
+      </div>
+
+      <div class="d-grid mb-2" style="grid-template-columns: repeat(7, 1fr); text-align: center;">
+        <div v-for="d in weekdays" :key="d" class="fw-bold">{{ d }}</div>
+      </div>
+
+      <div class="calendar">
+        <div v-for="(week, wi) in weeks" :key="wi" class="d-grid" style="grid-template-columns: repeat(7, 1fr); text-align: center;">
+          <div
+            v-for="(day, di) in week"
+            :key="di"
+            :class="[
+              'border p-2',
+              day?.isPast ? 'text-muted' : '',
+              day && !day.isBooked && !day.isPast ? 'bg-success text-white' : '',
+              day?.isBooked ? 'bg-danger text-white' : '',
+              'calendar-day'
+            ]"
+            @click="day && chooseDay(day)"
+            style="cursor: pointer;"
+          >
+            <strong v-if="day">{{ day.date.getDate() }}</strong>
           </div>
         </div>
       </div>
-  
-      <div v-else-if="step === 3" class="registration-form">
-        <h2>Krok 3: szczegóły wizyty</h2>
-        <form @submit.prevent="bookAppointment">
-          <label>
-            Specjalizacja:
-            <select v-model="appointment.specialization" required>
-              <option disabled value="">-- wybierz --</option>
-              <option
-                v-for="s in availableSpecializations"
-                :key="s"
-                :value="s"
-              >{{ s }}</option>
-            </select>
-          </label>
-  
-          <label>
-            Lekarz:
-            <select v-model="appointment.doctor" required>
-              <option disabled value="">-- wybierz --</option>
-              <option
-                v-for="d in availableDoctors"
-                :key="d.id"
-                :value="d.name"
-              >{{ d.name }}</option>
-            </select>
-          </label>
-  
-          <label>
-            Opis dolegliwości:
-            <textarea v-model="appointment.description" minlength="10" required></textarea>
-          </label>
-  
-          <p>Koszt wizyty: <strong>150 PLN</strong></p>
-  
-          <button type="submit">Zapisz wizytę</button>
-        </form>
+
+      <div v-if="selectedDay" class="mt-4">
+        <h3>Godziny dla {{ selectedDay.date.toLocaleDateString() }}</h3>
+        <div class="d-flex flex-wrap gap-2 mt-2">
+          <button
+            v-for="h in hours"
+            :key="h"
+            :disabled="isHourBooked(h)"
+            @click="chooseHour(h)"
+            :class="[
+              'btn',
+              isHourBooked(h) ? 'btn-secondary disabled' : 'btn-outline-primary',
+              h === selectedHour ? 'border border-primary' : ''
+            ]"
+          >{{ h }}</button>
+        </div>
       </div>
     </div>
-  </template>
+
+    <div v-else-if="step === 3" class="mb-4">
+      <h2 class="mb-3">Krok 3: szczegóły wizyty</h2>
+      <form @submit.prevent="bookAppointment" class="needs-validation">
+        <div class="mb-3">
+          <label class="form-label">Specjalizacja:</label>
+          <select v-model="appointment.specialization" required class="form-select">
+            <option disabled value="">-- wybierz --</option>
+            <option v-for="s in availableSpecializations" :key="s" :value="s">{{ s }}</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Lekarz:</label>
+          <select v-model="appointment.doctor" required class="form-select">
+            <option disabled value="">-- wybierz --</option>
+            <option v-for="d in availableDoctors" :key="d.id" :value="d.name">{{ d.name }}</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Opis dolegliwości:</label>
+          <textarea v-model="appointment.description" required minlength="10" class="form-control" rows="3"></textarea>
+        </div>
+
+        <p class="fw-bold">Koszt wizyty: 150 PLN</p>
+
+        <button type="submit" class="btn btn-success">Zapisz wizytę</button>
+      </form>
+    </div>
+  </div>
+</template>
+
   
   <script setup>
   import { ref, onMounted, watch, computed } from 'vue'
@@ -249,22 +253,33 @@
   }
   
   async function bookAppointment() {
-    const user = auth.currentUser
-    if (!user) return
-    await addDoc(
-      collection(db, 'clinics', selectedClinic.value, 'appointments'),
-      {
-        userId: user.uid,
-        date: Timestamp.fromDate(selectedDay.value.date),
-        hour: selectedHour.value,
-        specialization: appointment.value.specialization,
-        doctor: appointment.value.doctor,
-        description: appointment.value.description,
-        paymentMethod: 'PLN'
-      }
-    )
-    alert('Wizyta zarezerwowana!')
+  const user = auth.currentUser
+  if (!user) return
+
+  await addDoc(
+    collection(db, 'clinics', selectedClinic.value, 'appointments'),
+    {
+      userId: user.uid,
+      date: Timestamp.fromDate(selectedDay.value.date),
+      hour: selectedHour.value,
+      specialization: appointment.value.specialization,
+      doctor: appointment.value.doctor,
+      description: appointment.value.description,
+      paymentMethod: 'PLN'
+    }
+  )
+
+  alert('Wizyta zarezerwowana!')
+  
+  appointment.value = {
+    specialization: '',
+    doctor: '',
+    description: ''
   }
+  selectedDay.value = null
+  selectedHour.value = null
+  step.value = 1
+}
   
   onMounted(loadClinics)
   </script>
