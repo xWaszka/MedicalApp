@@ -36,7 +36,6 @@
               Kontakt
             </RouterLink>
           </li>
-
           <template v-if="!user">
             <li class="nav-item">
               <RouterLink
@@ -57,7 +56,6 @@
               </RouterLink>
             </li>
           </template>
-
           <template v-else>
             <li class="nav-item">
               <RouterLink
@@ -93,39 +91,68 @@ const user = ref(null)
 const router = useRouter()
 
 onMounted(() => {
-  onAuthStateChanged(auth, currentUser => {
+  onAuthStateChanged(auth, (currentUser) => {
     user.value = currentUser
   })
 })
 
 const handleLogout = async () => {
-  await signOut(auth)
-  router.push('/login')
+  try {
+    await signOut(auth)
+    router.push('/login')
+  } catch (err) {
+    console.error('Błąd podczas wylogowywania:', err)
+  }
 }
 </script>
 
 <style scoped>
-.navbar { border-radius: 0; }
-.navbar-brand { font-weight: bold; }
+.navbar {
+  border-radius: 0;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  background-color: transparent !important;
+}
+
 .nav-link {
   color: white !important;
   font-weight: bold;
 }
-.nav-link:hover { color: #ffcc00 !important; }
+
+.nav-link:hover {
+  color: #ffcc00 !important;
+}
+
 .navbar-toggler-icon {
   background-color: white;
-  width: 30px; height: 3px;
+  width: 30px;
+  height: 3px;
+  border-radius: 0;
   position: relative;
 }
+
 .navbar-toggler-icon:before,
 .navbar-toggler-icon:after {
-  content: ''; position: absolute;
-  width: 30px; height: 3px;
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 3px;
   background-color: white;
+  border-radius: 0;
 }
-.navbar-toggler-icon:before { top: -8px; }
-.navbar-toggler-icon:after  { top:  8px; }
-.nav-item .router-link-exact-active {
+
+.navbar-toggler-icon:before {
+  top: -8px;
+}
+
+.navbar-toggler-icon:after {
+  top: 8px;
+}
+
+.nav-item .nav-link.router-link-exact-active {
+  background-color: transparent !important;
   color: white !important;
 }
 </style>
