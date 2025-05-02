@@ -1,1 +1,0 @@
-import{_ as t,c as o,a as e,b as s,d as c,r as n,F as _,o as r}from"./index-8pIQ3OZO.js";const l={class:"main-content"},p={__name:"DefaultLayout",setup(u){return(m,d)=>{const a=n("router-view");return r(),o(_,null,[e(c,{class:"fixed-top"}),s("div",l,[e(a)])],64)}}},f=t(p,[["__scopeId","data-v-6eba5373"]]);export{f as default};
