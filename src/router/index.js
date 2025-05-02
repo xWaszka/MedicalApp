@@ -35,6 +35,12 @@ const routes = [
         meta: { requiresAuth: true }
       },
       {
+        path: 'remote',
+        name: 'RemoteAppointment',
+        component: () => import('@/views/RemoteAppointment.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
         path: 'appointment',
         name: 'Appointment',
         component: () => import('@/views/AppointmentForm.vue'),

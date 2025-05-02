@@ -66,6 +66,7 @@ const links = [
   { to: '/login',   text: 'Zaloguj się', auth: false },
   { to: '/register',text: 'Zarejestruj się', auth: false },
   { to: '/appointment', text: 'Umów wizytę', auth: true },
+  { to: '/remote', text: 'Zdalna konsultacja',     auth: true },
   { to: '/profile', text: 'Profil',     auth: true }
 ]
 

@@ -35,7 +35,7 @@
                 class="service-card d-flex flex-column align-items-center text-center text-decoration-none text-dark shadow-sm"
               >
                 <i class="bi bi-laptop fs-1 text-primary mb-3"></i>
-                <h5 class="fs-4 mb-2">Wizyty online</h5>
+                <h5 class="fs-4 mb-2">Zdalna konsultacja</h5>
                 <p class="flex-grow-1 fs-6 mb-0">Umów konsultację zdalnie z dowolnego miejsca.</p>
               </router-link>
             </div>
