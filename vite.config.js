@@ -1,13 +1,30 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-const path = require('path')
+import { VitePWA } from 'vite-plugin-pwa'
+import { fileURLToPath, URL } from 'node:url'
 
-// https://vitejs.dev/config/
 export default defineConfig({
+  plugins: [
+    vue(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      manifest: {
+        name: 'Medical App',
+        short_name: 'Medical',
+        start_url: '/',
+        display: 'standalone',
+        background_color: '#004085',
+        theme_color: '#004085',
+        icons: [
+          { src: 'icons/icon-192.png',   sizes: '192x192', type: 'image/png' },
+          { src: 'icons/icon-512.png',   sizes: '512x512', type: 'image/png' },
+        ]
+      }
+    })
+  ],
   resolve: {
     alias: {
-      '@': path.resolve( __dirname, './src' )
+      '@': fileURLToPath(new URL('./src', import.meta.url))
     }
-  },
-  plugins: [vue()]
+  }
 })

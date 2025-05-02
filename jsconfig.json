@@ -2,6 +2,9 @@
     "include": [
         "./src/**/*"
     ],
+    "exclude": [
+        "./src/components/FlashMessage.vue"
+    ],
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
