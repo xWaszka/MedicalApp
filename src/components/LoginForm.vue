@@ -1,62 +1,99 @@
 <template>
   <div class="container mt-5">
     <div class="row justify-content-center">
-      <div class="col-md-6 col-sm-10">
-        <div class="card shadow-sm">
-          <div class="card-body">
-            <h3 class="card-title text-center mb-3">Zaloguj się</h3>
-            <p class="text-center mb-4">
-              <RouterLink to="/register" class="small">Nie masz konta? Zarejestruj się</RouterLink>
-            </p>
-
-            <form @submit.prevent="handleLogin" novalidate>
-              <div class="mb-3">
-                <label for="email" class="form-label">Adres e-mail</label>
-                <input v-model="email" type="email" class="form-control" id="email" required />
-              </div>
-
-              <div class="mb-3">
-                <label for="password" class="form-label">Hasło</label>
-                <input v-model="password" type="password" class="form-control" id="password" required />
-              </div>
-
-              <div v-if="error" class="text-danger mb-3">{{ error }}</div>
-
-              <button type="submit" class="btn btn-primary w-100">Zaloguj się</button>
-            </form>
+      <div class="col-md-6">
+        <h2 class="text-center mb-4">Logowanie</h2>
+        <form @submit.prevent="login">
+          <div class="form-group mb-3">
+            <label for="email">Email</label>
+            <input
+              v-model="email"
+              type="email"
+              id="email"
+              class="form-control"
+              required
+            />
           </div>
-        </div>
+          <div class="form-group mb-3">
+            <label for="password">Hasło</label>
+            <input
+              v-model="password"
+              type="password"
+              id="password"
+              class="form-control"
+              required
+            />
+          </div>
+          <div v-if="error" class="alert alert-danger">
+            {{ error }}
+          </div>
+          <button type="submit" class="btn btn-primary w-100">
+            Zaloguj
+          </button>
+        </form>
+
+        <button @click="signInWithGoogle" class="btn btn-danger w-100 mt-3">
+          Zaloguj przez Google
+        </button>
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { auth } from '@/firebase'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+<script>
+import { auth, db } from '../firebase'
+import {
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup
+} from 'firebase/auth'
+import {
+  doc,
+  setDoc,
+  getDoc
+} from 'firebase/firestore'
 
-const email = ref('')
-const password = ref('')
-const error = ref(null)
+export default {
+  data() {
+    return {
+      email: '',
+      password: '',
+      error: ''
+    }
+  },
+  methods: {
+    async login() {
+      this.error = ''
+      try {
+        await signInWithEmailAndPassword(auth, this.email, this.password)
+        this.$router.push('/')
+      } catch (err) {
+        this.error = 'Nieprawidłowy email lub hasło.'
+      }
+    },
+    async signInWithGoogle() {
+      try {
+        const provider = new GoogleAuthProvider()
+        const result = await signInWithPopup(auth, provider)
+        const user = result.user
 
-const router = useRouter()
+        const userRef = doc(db, 'users', user.uid)
+        const userSnap = await getDoc(userRef)
 
-const handleLogin = async () => {
-  error.value = null
+        if (!userSnap.exists()) {
+          const displayName = user.displayName || ''
+          await setDoc(userRef, {
+            name: displayName,
+            email: user.email
+          })
+        }
 
-  try {
-    await signInWithEmailAndPassword(auth, email.value, password.value)
-    router.push('/')
-  } catch (err) {
-    error.value = 'Nieprawidłowy email lub hasło.'
+        this.$router.push('/')
+      } catch (error) {
+        console.error('Błąd logowania przez Google:', error)
+        this.error = 'Wystąpił błąd podczas logowania przez Google.'
+      }
+    }
   }
 }
 </script>
-
-<style scoped>
-.card {
-  border-radius: 1rem;
-}
-</style>

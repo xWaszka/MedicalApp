@@ -59,9 +59,7 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const requiresGuest = to.matched.some(record => record.meta.requiresGuest)
 
-  const checkAuth = () => {
-    const user = auth.currentUser
-
+  const proceed = (user) => {
     if (requiresAuth && !user) {
       next({ name: 'Login' })
     } else if (requiresGuest && user) {
@@ -71,13 +69,17 @@ router.beforeEach((to, from, next) => {
     }
   }
 
-  if (auth.currentUser === null) {
-    onAuthStateChanged(auth, () => {
-      checkAuth()
+  const user = auth.currentUser
+
+  if (user === null) {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      unsubscribe()
+      proceed(user)
     })
   } else {
-    checkAuth()
+    proceed(user)
   }
 })
+
 
 export default router

@@ -111,6 +111,18 @@ export default defineComponent({
     let map = null
     let marker = null
 
+    // Initialize map only after the DOM is updated
+    nextTick(() => {
+      const { coords, name } = cities.krakow
+      map = L.map('map', { zoomControl: false }).setView(coords, 13)
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+      }).addTo(map)
+      L.control.zoom({ position: 'topleft' }).addTo(map)
+      marker = L.marker(coords).addTo(map).bindPopup(name).openPopup()
+    })
+
     watch(selectedCity, async (newCity) => {
       if (!newCity) return
 
@@ -118,18 +130,8 @@ export default defineComponent({
 
       const { coords, name } = cities[newCity]
 
-      if (!map) {
-        map = L.map('map', { zoomControl: false }).setView(coords, 13)
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution:
-            '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
-        }).addTo(map)
-        L.control.zoom({ position: 'topleft' }).addTo(map)
-        marker = L.marker(coords).addTo(map).bindPopup(name).openPopup()
-      } else {
-        map.setView(coords, 13)
-        marker.setLatLng(coords).getPopup().setContent(name).openOn(map)
-      }
+      map.setView(coords, 13)
+      marker.setLatLng(coords).getPopup().setContent(name).openOn(map)
     })
 
     function callPhone() {
