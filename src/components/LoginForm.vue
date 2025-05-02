@@ -48,7 +48,6 @@ const handleLogin = async () => {
 
   try {
     await signInWithEmailAndPassword(auth, email.value, password.value)
-    alert('Zalogowano')
     router.push('/')
   } catch (err) {
     error.value = 'Nieprawidłowy email lub hasło.'
