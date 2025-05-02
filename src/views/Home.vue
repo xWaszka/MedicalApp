@@ -31,7 +31,7 @@
               </router-link>
 
               <router-link
-                to="/online"
+                to="/remote"
                 class="service-card d-flex flex-column align-items-center text-center text-decoration-none text-dark shadow-sm"
               >
                 <i class="bi bi-laptop fs-1 text-primary mb-3"></i>
@@ -158,18 +158,18 @@ html, body {
 }
 .snap-container {
   position: absolute;
-  top: 56px;           /* wysokość navbara */
+  top: 56px;           
   left: 0;
   right: 0;
   bottom: 0;
-  overflow-y: auto;    /* tylko tutaj będzie scroll */
+  overflow-y: auto;    
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
 }
 
 .snap-section {
   scroll-snap-align: start;
-  height: 100%;        /* teraz zajmuje całą dostępną wysokość pod navbarem */
+  height: 100%;        
   display: flex;
   align-items: center;
   justify-content: center;
@@ -252,7 +252,6 @@ html, body {
   background: #547792;
 }
 @media (max-width: 767px) {
-  /* Zmniejszamy odstęp pod nagłówkami sekcji */
   .snap-section.services,
   .snap-section.why-us,
   .snap-section.testimonials,
@@ -261,13 +260,11 @@ html, body {
     padding-bottom: 2rem !important;
   }
 
-  /* Mniej „przerośnięty” nagłówek w why-us */
   .why-us-header {
     margin-bottom: 2rem !important;
     font-size: 2rem;
   }
 
-  /* Mniejsze karty usług */
   .service-card {
     padding: 1rem !important;
     min-width: auto;
@@ -276,13 +273,11 @@ html, body {
   }
   
 
-  /* Mniejszy odstęp pomiędzy elementami w why-us */
   .why-us-items {
     gap: 1.5rem !important;
     
   }
 
-  /* Mniejsze marginesy dla pojedynczych „adv-item” */
   .adv-item {
     margin-bottom: 1rem !important;
     

@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '@/firebase'
 
 const routes = [
   {
@@ -47,6 +49,15 @@ const routes = [
         meta: { requiresAuth: true }
       },
       {
+        path: 'admin',
+        name: 'Admin',
+        component: () => import('@/views/Admin.vue'),
+        meta: {
+          requiresAuth: true,
+          roles: ['admin']
+        }
+      },
+      {
         path: ':pathMatch(.*)*',
         name: 'NotFound',
         component: () => import('@/views/NotFound.vue')
@@ -60,31 +71,40 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const auth = getAuth()
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  const requiresGuest = to.matched.some(record => record.meta.requiresGuest)
 
-  const proceed = (user) => {
-    if (requiresAuth && !user) {
-      next({ name: 'Login' })
-    } else if (requiresGuest && user) {
-      next({ name: 'Home' })
-    } else {
-      next()
+  const requiresAuth  = to.matched.some(r => r.meta.requiresAuth)
+  const requiresGuest = to.matched.some(r => r.meta.requiresGuest)
+
+  const allowedRoles = to.matched
+    .filter(r => r.meta.roles)
+    .flatMap(r => r.meta.roles)
+
+  let user = auth.currentUser
+  if (user === null) {
+    user = await new Promise(resolve => {
+      const unsub = onAuthStateChanged(auth, u => {
+        unsub()
+        resolve(u)
+      })
+    })
+  }
+
+  if (requiresAuth  && !user) { return next({ name: 'Login' }) }
+  if (requiresGuest &&  user) { return next({ name: 'Home'  }) }
+
+  if (allowedRoles.length && user) {
+    const snap = await getDoc(doc(db, 'users', user.uid))
+    const data = snap.data() || {}
+    const role = data.role
+
+    if (!allowedRoles.includes(role)) {
+      return next({ name: 'NotFound' })
     }
   }
 
-  const user = auth.currentUser
-
-  if (user === null) {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      unsubscribe()
-      proceed(user)
-    })
-  } else {
-    proceed(user)
-  }
+  next()
 })
 
 
