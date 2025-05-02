@@ -136,8 +136,11 @@
   if (!user) return
 
   const userRef = doc(db, 'users', user.uid)
+  
+  const phoneNumber = parseInt(form.value.phone.replace(/\D/g, ''))
+
   await setDoc(userRef, {
-    phone: form.value.phone,
+    phone: phoneNumber,
   }, { merge: true })
 
   const docData = {
@@ -145,7 +148,7 @@
     description: form.value.description,
     date: form.value.date,
     contactHour: form.value.contactHour,
-    phone: form.value.phone,
+    phone: phoneNumber,
   }
 
   const docRef = await addDoc(collection(db, 'remoteappointments'), docData)
@@ -191,6 +194,7 @@
   audioPreview.value = null
   availableHours.value = [...contactHours]
 }
+
 
 
   onMounted(async () => {
