@@ -137,7 +137,7 @@
 
   const userRef = doc(db, 'users', user.uid)
   
-  const phoneNumber = parseInt(form.value.phone.replace(/\D/g, ''))
+  const phoneNumber = parseInt(String(form.value.phone).replace(/\D/g, ''))
 
   await setDoc(userRef, {
     phone: phoneNumber,
