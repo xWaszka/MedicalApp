@@ -45,8 +45,8 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { auth, db } from '@/firebase'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { doc, setDoc } from 'firebase/firestore'
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
 
 const name = ref('')
 const email = ref('')
@@ -72,10 +72,12 @@ const handleRegister = async () => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email.value, password.value)
     const user = userCredential.user
-
+    await updateProfile(user, { displayName: name.value })
     await setDoc(doc(db, 'users', user.uid), {
       name: name.value,
       email: email.value,
+      role: 'user',
+      createdAt: serverTimestamp(),
     })
 
     name.value = ''
