@@ -1,17 +1,18 @@
 <template>
-    <div class="container my-5">
-      <div class="card p-4 shadow-sm mx-auto" style="max-width:800px">
-        <h2 class="display-4 text-center mb-4">Profil użytkownika</h2>
-        <div v-if="!loaded" class="text-center">Ładowanie danych…</div>
-        <div v-else>
-          <p><strong>Imię i nazwisko:</strong> {{ profile.name || '—' }}</p>
-          <p><strong>Email:</strong> {{ user.email }}</p>
-  
-          <h4 class="mt-4">Moje wizyty</h4>
-          <div v-if="appointments.length === 0" class="text-muted">
-            Brak zarezerwowanych wizyt.
-          </div>
-          <table v-else class="table mt-3">
+  <div class="container my-5">
+    <div class="card p-4 shadow-sm mx-auto" style="max-width:800px">
+      <h2 class="display-4 text-center mb-4">Profil użytkownika</h2>
+      <div v-if="!loaded" class="text-center">Ładowanie danych…</div>
+      <div v-else>
+        <p><strong>Imię i nazwisko:</strong> {{ profile.name || '—' }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+
+        <h4 class="mt-4">Moje wizyty</h4>
+        <div v-if="appointments.length === 0" class="text-muted">
+          Brak zarezerwowanych wizyt.
+        </div>
+        <div v-else class="table-responsive">
+          <table class="table mt-3">
             <thead>
               <tr>
                 <th>Przychodnia</th>
@@ -36,7 +37,9 @@
         </div>
       </div>
     </div>
-  </template>
+  </div>
+</template>
+
   
   <script setup>
   import { ref, onMounted } from 'vue'

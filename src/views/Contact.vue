@@ -107,7 +107,7 @@ export default defineComponent({
       }
     }
 
-    const selectedCity = ref(null)
+    const selectedCity = ref('krakow')
     let map = null
     let marker = null
 

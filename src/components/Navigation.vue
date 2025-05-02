@@ -4,19 +4,20 @@
       <RouterLink to="/" class="navbar-brand">Medical App</RouterLink>
 
       <button
-        ref="toggler"
         class="navbar-toggler"
         type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
+        @click="toggleNav"
+        :aria-expanded="!isCollapsed"
         aria-label="Toggle navigation"
       >
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div ref="navCollapse" class="collapse navbar-collapse" id="navbarNav">
+      <div
+        class="collapse navbar-collapse"
+        :class="{ show: !isCollapsed }"
+        id="navbarNav"
+      >
         <ul class="navbar-nav ms-auto">
           <li
             v-for="link in filteredLinks"
@@ -27,7 +28,7 @@
               :to="link.to"
               class="nav-link"
               active-class="active-link"
-              @click="hideNav"
+              @click="handleLinkClick"
             >
               {{ link.text }}
             </RouterLink>
@@ -48,11 +49,10 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { auth } from '@/firebase'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
-import { Collapse } from 'bootstrap'
 
 const user = ref(null)
+const isCollapsed = ref(true)
 const router = useRouter()
-const navCollapse = ref(null)
 
 onMounted(() => {
   onAuthStateChanged(auth, u => {
@@ -77,15 +77,17 @@ const filteredLinks = computed(() =>
   )
 )
 
-function hideNav() {
-  
-  const bs = Collapse.getInstance(navCollapse.value) || new Collapse(navCollapse.value)
-  bs.hide()
+function toggleNav() {
+  isCollapsed.value = !isCollapsed.value
+}
+
+function handleLinkClick() {
+  isCollapsed.value = true
 }
 
 async function logout() {
   await signOut(auth)
-  hideNav()
+  isCollapsed.value = true
   router.push('/login')
 }
 </script>
