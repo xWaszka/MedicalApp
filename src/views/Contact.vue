@@ -111,7 +111,6 @@ export default defineComponent({
     let map = null
     let marker = null
 
-    // Initialize map only after the DOM is updated
     nextTick(() => {
       const { coords, name } = cities.krakow
       map = L.map('map', { zoomControl: false }).setView(coords, 13)
