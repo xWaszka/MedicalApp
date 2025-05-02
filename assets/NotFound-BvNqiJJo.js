@@ -1,0 +1,1 @@
+import{_ as e,c as o,o as t,b as c}from"./index-CFEYUHuW.js";const n={},r=c("h1",null,"404 error",-1),s=[r];function _(a,d){return t(),o("div",null,s)}const f=e(n,[["render",_]]);export{f as default};
