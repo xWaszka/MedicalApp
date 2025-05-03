@@ -4,13 +4,13 @@ import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
  
 const firebaseConfig = {
-    apiKey: "AIzaSyB3XVapXr0q4O3VV7IJHUF0KjSoAEBWm2s",
-    authDomain: "medicalapp-68cb7.firebaseapp.com",
-    projectId: "medicalapp-68cb7",
-    storageBucket: "medicalapp-68cb7.firebasestorage.app",
-    messagingSenderId: "517067229681",
-    appId: "1:517067229681:web:fa709dad4494b2fbe9dc50"
-};
+    apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
+    authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.VUE_APP_FIREBASE_APP_ID,
+  };
  
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
