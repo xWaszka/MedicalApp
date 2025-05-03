@@ -3,8 +3,8 @@
     "short_name": "Medical",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#004085",
-    "theme_color": "#004085",
+    "background_color": "#106cfc",
+    "theme_color": "#106cfc",
     "icons": [
       {
         "src": "/MedicalApp/icons/icon-192.png",
