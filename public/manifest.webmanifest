@@ -1,6 +1,6 @@
 {
     "name": "Medical App",
-    "short_name": "Medical",
+    "short_name": "Medical App",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#106cfc",

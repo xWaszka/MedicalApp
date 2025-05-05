@@ -3,6 +3,9 @@
     <div class="row justify-content-center">
       <div class="col-md-6">
         <h2 class="text-center mb-4">Logowanie</h2>
+        <p class="text-center mb-4">
+              <RouterLink to="/register" class="small">Nie posiadasz konta? Zarejestruj się!</RouterLink>
+            </p>
         <form @submit.prevent="login">
           <div class="form-group mb-3">
             <label for="email">Email</label>
@@ -33,7 +36,7 @@
         </form>
 
         <button @click="signInWithGoogle" class="btn btn-danger w-100 mt-3">
-          Zaloguj przez Google
+          Zaloguj się przez Google
         </button>
       </div>
     </div>

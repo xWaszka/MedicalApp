@@ -4,9 +4,9 @@
       <div class="col-md-6 col-sm-10">
         <div class="card shadow-sm">
           <div class="card-body">
-            <h3 class="card-title text-center mb-3">Zarejestruj nowe konto</h3>
+            <h3 class="card-title text-center mb-3">Zarejestruj się</h3>
             <p class="text-center mb-4">
-              <RouterLink to="/login" class="small">Masz już konto? Zaloguj się</RouterLink>
+              <RouterLink to="/login" class="small">Posiadasz już konto? Zaloguj się</RouterLink>
             </p>
 
             <form @submit.prevent="handleRegister" novalidate>
