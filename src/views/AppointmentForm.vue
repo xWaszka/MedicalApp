@@ -97,8 +97,6 @@
             ></textarea>
           </div>
   
-          <p class="fw-bold">Koszt wizyty: 150 PLN</p>
-  
           <button type="submit" class="btn btn-success">Zapisz wizytę</button>
         </form>
       </div>
@@ -261,7 +259,6 @@
       specialization: appointment.value.specialization,
       doctor:        appointment.value.doctor,
       description:   appointment.value.description,
-      paymentMethod: 'PLN'
     }
   
     
